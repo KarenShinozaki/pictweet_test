@@ -1,0 +1,14 @@
+  <div class="contents row" >
+    <p><%= @nickname %>さんの投稿一覧</p>
+    <% @tweets.each do |tweet| %>
+   <%= render partial: "tweets/tweet", locals: { tweet: tweet } %>
+    <% end %>
+    <%= paginate(@tweets) %>
+  </div>
+
+<!--
+2 usersコントローラーの  @nickname = user.nicknameと連動。表示される。
+3  @tweets = user.tweets.page(params[:page]).per(5).order("created_at DESC")と連動している。tweetを繰り返し表示して@tweetsにするもの
+4 render partialを使い、コントローラーをまたいで部分テンプレートに遷移しているため、明示的に示す、tweets(ファイルの中の)/tweet(テンプレート)、tweetという言葉が代入されたtweetを部分てのプレート内で使用できる。
+6 コントローラーで５件ずつ表示する仕様を記載し、ビューファイルでpaginateを記載しページネーション適用
+ -->

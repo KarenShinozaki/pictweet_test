@@ -1,0 +1,56 @@
+<div class ="contents row">
+  <div class="content_post" style="background-image: url(<%= @tweet.image %>);">
+    <% if user_signed_in? && current_user.id == @tweet.user_id %>
+      <div class="more">
+        <span><%= image_tag 'arrow_top.png' %></span>
+      <ul class="more_list">
+        <li>
+          <%= link_to '編集', "/tweets/#{@tweet.id}/edit", method: :get %>
+        </li>
+        <li>
+          <%= link_to '削除', "/tweets/#{@tweet.id}", method: :delete %>
+        </li>
+      </ul>
+    </div>
+    <% end %>
+    <%= simple_format(@tweet.text) %>
+    <span class="name">
+      <a href="/users/<%= @tweet.user.id %>">
+        <span>投稿者</span><%= @tweet.user.nickname %>
+      </a>
+    </span>
+  </div>
+    <div class="container">
+    <!-- ここからフォーム -->
+    <% if current_user %>
+      <%= form_tag("/tweets/#{@tweet.id}/comments", method: :post) do %>
+        <textarea cols="30" name="text" placeholder="コメントする" rows="2"></textarea>
+        <input type="submit" value="SENT">
+      <% end %>
+    <% end %>
+    <div class="comments">
+      <h4>＜コメント一覧＞</h4>
+      <% if @comments %>
+        <% @comments.each do |comment| %>
+          <p>
+            <strong><%= link_to comment.user.nickname, "/users/#{comment.user_id}" %>：</strong>
+            <%= comment.text %>
+          </p>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- ユーザーがサインインしていて、かつ現在ログイン中のユーザーのidがツイートのユーザーidと一致して入れば、編集と削除ボタンが詳細ページで現れる。サインインしていない状態の場合、ボタンは表示されない。
+16 simple_formatでtweetのtextの改行を適用させている。
+18 /users/tweet.user_idページへの遷移を促している。
+19 投稿者と、改行をし、アソシエーションを組んでいるため、tweetとユーザーは1:1であり、ツイートをしたユーザーのニックネームを表示させている。
+25 ログインしているユーザーであれば、showページに遷移した際、コメントを投稿することができる。-
+27 text属性で、何もない状態だと薄く、”コメントしてください”の文字が出るようになっている。
+33 commentsコントローラーと連動し、もし@comment = Comment.create(text: params[:text], tweet_id: params[:tweet_id], user_id: current_user.id)このように作られたコメントが存在する場合、コメント履歴が以下表示される仕様である
+34 eachメソッドでコメントを繰り返し表示している
+36 1つのcommentに対しuserは1:1なのでコメントをしたユーザーのニックネームを押すと、/users/#{comment.user_id}とあり、コメントをしたユーザーの情報が一覧で表示される。
+37 comment.textで変数.カラム名で、DBからcommentテーブルのtextカラムの情報を引き出すことができる。
+
+->

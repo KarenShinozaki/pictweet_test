@@ -1,0 +1,36 @@
+<div class="content_post" style="background-image: url(<%= tweet.image %>);">
+  <div class="more">
+    <span><%= image_tag 'arrow_top.png' %></span>
+    <ul class="more_list">
+      <li>
+        <%= link_to "詳細", tweet_path(tweet.id), method: :get %>
+      </li>
+      <% if user_signed_in? && current_user.id == tweet.user_id %>
+        <li>
+          <%= link_to '編集', "/tweets/#{tweet.id}/edit", method: :get %>
+        </li>
+        <li>
+          <%= link_to '削除', "/tweets/#{tweet.id}", method: :delete %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+  <%= simple_format(tweet.text) %>
+  <span class="name">
+    <a href="/users/<%= tweet.user_id %>">
+      <span>投稿者</span><%= tweet.user.nickname %>
+    </a>
+  </span>
+</div>
+
+<!--
+
+6 インデックスページから詳細ページへのリンクを書いている。
+8 ユーザーがサインインをしている状態かつ、現在ログイン中のユーザーidがツイートのユーザーidと等しい場合、編集と削除ボタンを表示させる仕組みになっている
+10 /tweets/#{tweet.id}/editというページへの遷移ボタンを描く仕組み。メソッドはgetでページを表示させる
+13 /tweets/#{tweet.id}というページに遷移させるためのツイートを削除するボタン。deleteメソッドで削除している。
+18 simple_formatでtweetのtextの改行を適用させている。
+20 /users/tweet.user_idページへの遷移を促している。
+21 投稿者と、改行をし、アソシエーションを組んでいるため、tweetとユーザーは1:1であり、ツイートをしたユーザーのニックネームを表示させている。
+
+  -->

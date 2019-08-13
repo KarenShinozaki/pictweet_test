@@ -1,0 +1,12 @@
+<div class="contents row">
+
+  <% @tweets.each do |tweet| %>
+    <%= render partial: "tweet", locals: { tweet: tweet } %>
+  <% end %>
+  <%= paginate(@tweets) %>
+</div>
+
+<!--eachメソッドを使い、tweetを繰り返して表示させて設定を１度で済むようにしている。
+renderメソッドで、部分テンプレートへの遷移を促し、partialで、移動テンプレートを'tweet'と明示的にしている。
+localsを使用し、右辺tweetの文字列が代入された左辺tweetを部分テンプレート内で使用できる。
+また、ビューファイルで記載したように、ページネーションを実行するため、@tweetsでページネーションを有効化している。 -->
