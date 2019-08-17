@@ -5,7 +5,7 @@ class TweetsController < ApplicationController
   #全てのアクションの実行前にインデックスページに飛ぶ。ただし、インデックスページと詳細ページは除く
 
   def index
-     @tweets = Tweet.includes(:user).order("id DESC").page(params[:page]).per(5)
+     @tweets = Tweet.includes(:user).order("created_at DESC").page(params[:page]).per(5)
     #ツイートモデルを降順に５件のみ表示させる左辺を、ビューファイルで使用したい@tweetsに入れる そこで定義
 
   end
